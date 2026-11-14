@@ -52,29 +52,27 @@ eco_store/
 
 ##### 🔐 Security Practices
 
-*Environment-Based Configuration: No API keys, bucket names, or admin credentials are hardcoded in source control.
-
-*Hardened Sessions: Uses HttpOnly, Secure, and SameSite=Lax session cookies signed with a cryptographic FLASK_SECRET_KEY, paired with constant-time password verification (hmac.compare_digest).
-
-*Upload & Input Validation: Enforces MIME-type checks, sanitized filenames (secure_filename), a 5 MB upload size limit, and duplicate product name prevention.
+* **Environment-Based Configuration:** No API keys, bucket names, or admin credentials are hardcoded in source control.
+* **Hardened Sessions:** Uses `HttpOnly`, `Secure`, and `SameSite=Lax` session cookies signed with a cryptographic `FLASK_SECRET_KEY`, paired with constant-time password verification (`hmac.compare_digest`).
+* **Upload & Input Validation:** Enforces MIME-type checks, sanitized filenames (`secure_filename`), a 5 MB upload size limit, and duplicate product name prevention.
 
 
 ###### 🚀 Deployment Guide (Google Cloud Run)
 
 1. Prerequisites
    
-*A Google Cloud project with Cloud Run, Cloud Firestore (Native mode), and Cloud Storage enabled.
-*A public-read Cloud Storage bucket (Storage Object Viewer granted to allUsers) for serving product images.
-*A Stripe account in Test / Sandbox Mode.
+* **A Google Cloud project with Cloud Run, Cloud Firestore (Native mode), and Cloud Storage enabled.
+* **A public-read Cloud Storage bucket (Storage Object Viewer granted to allUsers) for serving product images.
+* **A Stripe account in Test / Sandbox Mode.
 
 3. Required Environment Variables
 
 Configure the following environment variables on your Cloud Run service:
 
-*FLASK_SECRET_KEY - Random cryptographic hex key used to sign Flask session cookies
-*ADMIN_PASSWORD - Strong password required to unlock Seller Dashboard controls
-*BUCKET_NAME - Name of your Google Cloud Storage bucket
-*STRIPE_SECRET_KEY - Your Stripe Sandbox/Test secret key (sk_test_... or rk_test_...)
+* **FLASK_SECRET_KEY - Random cryptographic hex key used to sign Flask session cookies
+* **ADMIN_PASSWORD - Strong password required to unlock Seller Dashboard controls
+* **BUCKET_NAME - Name of your Google Cloud Storage bucket
+* **STRIPE_SECRET_KEY - Your Stripe Sandbox/Test secret key (sk_test_... or rk_test_...)
 
 3. Deploy from Source
 
