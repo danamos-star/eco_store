@@ -48,15 +48,15 @@ eco_store/
 ├── requirements.txt        # Pinned Python dependencies
 ├── .gitignore              # Excludes secrets, virtual environments, and cache files
 └── README.md               # Project documentation
-
-
+```
+```
 ##### 🔐 Security Practices
 
 * **Environment-Based Configuration:** No API keys, bucket names, or admin credentials are hardcoded in source control.
 * **Hardened Sessions:** Uses `HttpOnly`, `Secure`, and `SameSite=Lax` session cookies signed with a cryptographic `FLASK_SECRET_KEY`, paired with constant-time password verification (`hmac.compare_digest`).
 * **Upload & Input Validation:** Enforces MIME-type checks, sanitized filenames (`secure_filename`), a 5 MB upload size limit, and duplicate product name prevention.
-
-
+```
+```
 ###### 🚀 Deployment Guide (Google Cloud Run)
 
 1. Prerequisites
@@ -78,6 +78,8 @@ Configure the following environment variables on your Cloud Run service:
 
 gcloud run deploy ecostore-app \
   --source . \
+
+```
   --region us-central1 \
   --allow-unauthenticated \
   --set-env-vars="BUCKET_NAME=your-bucket-name,FLASK_SECRET_KEY=your-random-secret,ADMIN_PASSWORD=your-strong-password,STRIPE_SECRET_KEY=your-stripe-test-key"
