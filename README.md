@@ -84,6 +84,3 @@ gcloud run deploy ecostore-app \
 --allow-unauthenticated \
   --set-env-vars="BUCKET_NAME=your-bucket-name,FLASK_SECRET_KEY=your-random-secret,ADMIN_PASSWORD=your-strong-password,STRIPE_SECRET_KEY=your-stripe-test-key"
 ```
-  --allow-unauthenticated \
-  --set-env-vars="BUCKET_NAME=your-bucket-name,FLASK_SECRET_KEY=your-random-secret,ADMIN_PASSWORD=your-strong-password,STRIPE_SECRET_KEY=your-stripe-test-key"
-```
