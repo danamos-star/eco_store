@@ -39,6 +39,7 @@ A full-stack serverless e-commerce web application built with **Python (Flask)**
 
 #### 📁 Project Structure
 
+```text
 eco_store/
 ├── app.py                  # Flask application, Cloud Storage/Firestore logic, Stripe routes
 ├── templates/
