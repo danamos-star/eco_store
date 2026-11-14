@@ -61,11 +61,12 @@ eco_store/
 ###### 🚀 Deployment Guide (Google Cloud Run)
 
 1. Prerequisites
+   
 *A Google Cloud project with Cloud Run, Cloud Firestore (Native mode), and Cloud Storage enabled.
 *A public-read Cloud Storage bucket (Storage Object Viewer granted to allUsers) for serving product images.
 *A Stripe account in Test / Sandbox Mode.
 
-2. Required Environment Variables
+3. Required Environment Variables
 
 Configure the following environment variables on your Cloud Run service:
 
