@@ -2,23 +2,23 @@
 **Live Demo:** [https://ecostore-app-527805643521.us-central1.run.app](https://ecostore-app-527805643521.us-central1.run.app)  
 *(Note: Hosted on Google Cloud Run. Use Stripe test card `4242 4242 4242 4242` with any future expiry and CVC to test checkout.)*
 
-A full-stack serverless e-commerce web application built with **Python (Flask)** and hosted on **Google Cloud Run**. Designed around two core storefront experiences—a **Customer Storefront** and a password-protected **Seller Dashboard**—with real-time catalog management, cloud media storage, and **Stripe Test Mode** checkout.
+A full-stack serverless e-commerce web application built with **Python (Flask)** and hosted on **Google Cloud Run**. Designed around two core storefront experiences: a **Customer Storefront** and a password-protected **Seller Dashboard** with real-time catalog management, cloud media storage, and **Stripe Test Mode** checkout.
 
 ---
 
-## ✨ Two Core Storefront Experiences
+## ✨ Two core storefront experiences
 
-### 🛍️ Customer Storefront
-* **Browse Catalog:** View live eco-friendly product cards with images, categories, descriptions, and pricing.
-* **Search & Filter:** Query products dynamically by keyword or filter by category (*Home & Kitchen*, *Personal Care*, *Reusable Bags & Bottles*).
-* **Shopping Basket:** Add items client-side with real-time total calculation.
-* **Card Checkout:** Pay securely via **Stripe Checkout (Test Mode)** with automatic success and cancellation redirects.
+### 🛍️ Customer storefront
+* **Browse catalog:** View live eco-friendly product cards with images, categories, descriptions, and pricing.
+* **Search and filter:** Query products dynamically by keyword or filter by category (*Home & Kitchen*, *Personal Care*, *Reusable Bags & Bottles*).
+* **Shopping basket:** Add items client-side with real-time total calculation.
+* **Card checkout:** Pay securely via **Stripe Checkout (Test Mode)** with automatic success and cancellation redirects.
 
-### ⚙️ Seller Dashboard (Admin Mode)
-* **Photo Upload:** Stream validated product images (`PNG`, `JPG`, `WEBP`, `GIF`) directly to Google Cloud Storage.
-* **Metadata Storage:** Persist product titles, categories, pricing, descriptions, and public image URLs in Cloud Firestore.
-* **Live Edits & Deletion:** Update product descriptions and pricing anytime, or delete products along with their associated Cloud Storage objects.
-* **Zero Maintenance:** Fully managed, auto-scaling serverless backend on Google Cloud Run.
+### ⚙️ Seller dashboard (Admin mode)
+* **Photo upload:** Stream validated product images (`PNG`, `JPG`, `WEBP`, `GIF`) directly to Google Cloud Storage.
+* **Metadata storage:** Persist product titles, categories, pricing, descriptions, and public image URLs in Cloud Firestore.
+* **Live edits and deletion:** Update product descriptions and pricing anytime, or delete products along with their associated Cloud Storage objects.
+* **Zero maintenance:** Fully managed, auto-scaling serverless backend on Google Cloud Run.
 
 ---
 
@@ -26,19 +26,19 @@ A full-stack serverless e-commerce web application built with **Python (Flask)**
 
 | Component | Technology | Role |
 | :--- | :--- | :--- |
-| **Compute & Routing** | Google Cloud Run (Python / Flask / Gunicorn) | Hosts the web application and handles customer & admin HTTP requests |
+| **Compute and Routing** | Google Cloud Run (Python / Flask / Gunicorn) | Hosts the web application and handles customer & admin HTTP requests |
 | **Media Storage** | Google Cloud Storage (GCS) | Stores public JPEG/PNG/WEBP/GIF product images |
 | **Database** | Google Cloud Firestore (Native Mode) | NoSQL document database storing product metadata and image URLs |
 | **Payments** | Stripe Checkout API | Processes test card checkout sessions securely in Sandbox mode |
 
-### End-to-End Request & Data Flow
+### End-to-End Request and Data Flow
 ```text
 [ Web Browser ] ──(HTTPS / Form Data)──▶ [ Cloud Run (Flask Server) ]
                                               ├──▶ Cloud Storage (Product Images)
                                               ├──▶ Firestore Native (Metadata & URLs)
                                               └──▶ Stripe Checkout (Test Card Payments)
 ```
-## 📁 Project Structure
+## 📁 Project structure
 
 ```text
 eco_store/
@@ -53,22 +53,33 @@ eco_store/
 
 ---
 
-## 🔐 Security Practices
+## 🔐 Security practices
 
-* **Environment-Based Configuration:** No API keys, bucket names, or admin credentials are hardcoded in source control.
-* **Hardened Sessions:** Uses `HttpOnly`, `Secure`, and `SameSite=Lax` session cookies signed with a cryptographic `FLASK_SECRET_KEY`, paired with constant-time password verification (`hmac.compare_digest`).
-* **Upload & Input Validation:** Enforces MIME-type checks, sanitized filenames (`secure_filename`), a 5 MB upload size limit, and duplicate product name prevention.
+* **Environment-based configuration:** No API keys, bucket names, or admin credentials are hardcoded in source control.
+* **Hardened sessions:** Uses `HttpOnly`, `Secure`, and `SameSite=Lax` session cookies signed with a cryptographic `FLASK_SECRET_KEY`, paired with constant-time password verification (`hmac.compare_digest`).
+* **Upload and input validation:** Enforces MIME-type checks, sanitized filenames (`secure_filename`), a 5 MB upload size limit, and duplicate product name prevention.
 
+🛡️ Optional Cloud cost and misuse hardening
+
+To keep the deployment safely within Google Cloud's Always Free tier and protect against traffic spikes or misuse, the live demo includes the following optional safeguards:
+
+* **Compute and scaling caps:** Configured a Cloud Run monthly spend cap, set `--max-instances=2` (with `--min-instances=0` scale-to-zero), and pinned Gunicorn to `--workers 1 --threads 8` to prevent runaway container scaling during traffic spikes.
+* **Billing alerts:** Added a secondary project-wide alerts-only budget covering all GCP services (Firestore, Cloud Storage, Artifact Registry) with email notifications.
+* **Brute-Force login protection:** Added IP-aware in-memory rate limiting (`X-Forwarded-For`) on `/admin/login` that locks out repeated failed password attempts for 10 minutes after 5 tries.
+* **Database and catalog guardrails:** Enforced default-deny Firestore Security Rules (`allow read, write: if false;`) so only IAM-authenticated server code can access data, chained `.limit(50)` onto queries, and capped total catalog items at 30 products.
+* **Storage and image optimization:** Configured Uniform bucket-level access (read-only `allUsers` viewer role), set `Cache-Control: public, max-age=86400` headers for edge caching, and added an Object Lifecycle rule to automatically delete incomplete multi-part uploads after 1 day.
+* **Container Registry cleanup:** Added an Artifact Registry cleanup policy to automatically purge older container images after redeploys so image storage remains under the 500 MB free tier.
+  
 ---
 
-## 🚀 Deployment Guide (Google Cloud Run)
+## 🚀 Deployment guide (Google Cloud Run)
 
 ### 1. Prerequisites
 * A Google Cloud project with **Cloud Run**, **Cloud Firestore (Native mode)**, and **Cloud Storage** enabled.
 * A public-read Cloud Storage bucket (`Storage Object Viewer` granted to `allUsers`) for serving product images.
 * A **Stripe** account in **Test / Sandbox Mode**.
 
-### 2. Required Environment Variables
+### 2. Required environment variables
 Configure the following environment variables on your Cloud Run service:
 
 | Variable | Description |
