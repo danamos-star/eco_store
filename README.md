@@ -1,4 +1,6 @@
 # 🌿 EcoStore
+**Live Demo:** [https://ecostore-app-527805643521.us-central1.run.app](https://ecostore-app-527805643521.us-central1.run.app)  
+*(Note: Hosted on Google Cloud Run. Use Stripe test card `4242 4242 4242 4242` with any future expiry and CVC to test checkout.)*
 
 A full-stack serverless e-commerce web application built with **Python (Flask)** and hosted on **Google Cloud Run**. Designed around two core storefront experiences—a **Customer Storefront** and a password-protected **Seller Dashboard**—with real-time catalog management, cloud media storage, and **Stripe Test Mode** checkout.
 
