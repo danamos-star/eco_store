@@ -37,10 +37,10 @@ A full-stack serverless e-commerce web application built with **Python (Flask)**
                                               ├──▶ Cloud Storage (Product Images)
                                               ├──▶ Firestore Native (Metadata & URLs)
                                               └──▶ Stripe Checkout (Test Card Payments)
+```
 
 [![Architecture diagram of danamos-star/eco_store](https://gitdiagram.com/danamos-star/eco_store/diagram.png)](https://gitdiagram.com/danamos-star/eco_store?utm_source=readme&utm_medium=picture)
 
-```
 ## 📁 Project structure
 
 ```text
